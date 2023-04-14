@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 OutlinedBorder plantBorder() {
   return const RoundedRectangleBorder(
@@ -9,13 +10,16 @@ OutlinedBorder plantBorder() {
   );
 }
 
+
+//todo use some image loader plugin
 Widget plantImage(String url) {
   return AspectRatio(
     aspectRatio: 7.0 / 4.0,
     child: ClipRRect(
       borderRadius: const BorderRadius.only(topRight: Radius.circular(10.0)),
-      child: Image.network(
-        url,
+      child: FadeInImage.memoryNetwork(
+        placeholder: kTransparentImage,
+        image: url,
         width: double.infinity,
         fit: BoxFit.cover,
       ),

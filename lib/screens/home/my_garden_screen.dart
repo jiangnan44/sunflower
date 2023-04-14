@@ -125,9 +125,7 @@ class _EmptyGardenView extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('add plant')),
-              );
+              DefaultTabController.of(context).animateTo(1);
             },
             style: TextButton.styleFrom(
                 shape: plantBorder(),

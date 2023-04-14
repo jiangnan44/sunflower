@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:sunflower/models/gallery_model.dart';
 
 import 'common/theme.dart';
 import 'models/plants_model.dart';
@@ -33,7 +34,7 @@ class SunflowerApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     ColorScheme colorScheme =const ColorScheme(
+    ColorScheme colorScheme = const ColorScheme(
       brightness: Brightness.light,
       primary: SColors.green500,
       onPrimary: SColors.gray50,
@@ -47,8 +48,11 @@ class SunflowerApp extends StatelessWidget {
       onSurface: SColors.green900,
     );
 
-    return ChangeNotifierProvider(
-      create: (context) => PlantModel(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => PlantModel()),
+        ChangeNotifierProvider(create: (context) => GalleryModel()),
+      ],
       child: MaterialApp.router(
         theme: ThemeData.from(colorScheme: colorScheme),
         scaffoldMessengerKey: GlobalSnackBar.key,

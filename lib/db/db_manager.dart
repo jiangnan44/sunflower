@@ -10,6 +10,7 @@ import 'plants_dao.dart';
 import '../models/plant.dart';
 import '../util/logger.dart';
 
+// todo use some database framework plugin
 class DbManager {
   static const _version = 1;
   static const _dbName = "sun_flower.db";

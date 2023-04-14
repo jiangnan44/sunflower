@@ -88,19 +88,19 @@ class _PlantDetailView extends StatefulWidget {
 
 class _PlantDetailViewState extends State<_PlantDetailView> {
   int _imageHeight = 0;
-  bool _isPlanted =
-      false; //this field can be added to Plant and store in database
+
+  //this field can be added to Plant and store in database
+  bool _isPlanted = false;
 
   @override
   Widget build(BuildContext context) {
     final image = _buildHeaderImage();
-    final textTheme = Theme.of(context).textTheme;
     _isPlanted = context.read<PlantModel>().isPlanted(widget.plant.plantId);
 
     return SingleChildScrollView(
       child: Stack(
         children: [
-          _buildMainColumn(image, textTheme),
+          _buildMainColumn(image, context),
           if (_imageHeight > 0)
             _isPlanted ? _buildRemoveButton(context) : _buildAddButton(context)
         ],
@@ -108,7 +108,9 @@ class _PlantDetailViewState extends State<_PlantDetailView> {
     );
   }
 
-  Column _buildMainColumn(FadeInImage image, TextTheme textTheme) {
+  Column _buildMainColumn(FadeInImage image, BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final hasKey = context.read<PlantModel>().hasUnsplashKey;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -121,13 +123,7 @@ class _PlantDetailViewState extends State<_PlantDetailView> {
           ),
         ),
         const SizedBox(height: 18.0),
-        Text(
-          'Watering needs',
-          style: textTheme.titleMedium!.copyWith(
-            color: SColors.green700,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        _buildWateringColumn(textTheme, hasKey),
         const SizedBox(height: 6.0),
         Text(
           widget.plant.wateringIntervalString(),
@@ -137,6 +133,56 @@ class _PlantDetailViewState extends State<_PlantDetailView> {
         _buildHtml(textTheme.bodyMedium!),
         const SizedBox(height: 50.0),
       ],
+    );
+  }
+
+  //there should have some better ways,i just don't know how ,for now
+  Widget _buildWateringColumn(TextTheme textTheme, final bool hasKey) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _space25(),
+        _space25(),
+        _space25(),
+        Text(
+          'Watering needs',
+          style: textTheme.titleMedium!.copyWith(
+            color: SColors.green700,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        _space25(),
+        _isPlanted
+            ? GestureDetector(
+                onTap: () {
+                  GlobalSnackBar.show('watering');
+                },
+                child: const Icon(
+                  Icons.water_drop_outlined,
+                  size: 25.0,
+                  color: Colors.lightBlueAccent,
+                ),
+              )
+            : _space25(),
+        hasKey
+            ? GestureDetector(
+                onTap: () {
+                  GlobalSnackBar.show('to gallery');
+                },
+                child: const Icon(
+                  Icons.image_search,
+                  size: 25.0,
+                ),
+              )
+            : _space25(),
+      ],
+    );
+  }
+
+  Widget _space25() {
+    return const SizedBox(
+      width: 25.0,
+      height: 25.0,
     );
   }
 
