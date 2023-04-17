@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:sunflower/models/gallery_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/theme.dart';
@@ -110,7 +112,7 @@ class _PlantDetailViewState extends State<_PlantDetailView> {
 
   Column _buildMainColumn(FadeInImage image, BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final hasKey = context.read<PlantModel>().hasUnsplashKey;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -123,7 +125,7 @@ class _PlantDetailViewState extends State<_PlantDetailView> {
           ),
         ),
         const SizedBox(height: 18.0),
-        _buildWateringColumn(textTheme, hasKey),
+        _buildWateringColumn(context, textTheme),
         const SizedBox(height: 6.0),
         Text(
           widget.plant.wateringIntervalString(),
@@ -137,7 +139,8 @@ class _PlantDetailViewState extends State<_PlantDetailView> {
   }
 
   //there should have some better ways,i just don't know how ,for now
-  Widget _buildWateringColumn(TextTheme textTheme, final bool hasKey) {
+  Widget _buildWateringColumn(BuildContext context, TextTheme textTheme) {
+    final hasKey = context.watch<GalleryModel>().hasUnsplashKey;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -167,7 +170,9 @@ class _PlantDetailViewState extends State<_PlantDetailView> {
         hasKey
             ? GestureDetector(
                 onTap: () {
-                  GlobalSnackBar.show('to gallery');
+                  context.go(Uri(
+                    path: '/gallery/${widget.plant.name}',
+                  ).toString());
                 },
                 child: const Icon(
                   Icons.image_search,
@@ -232,6 +237,7 @@ class _PlantDetailViewState extends State<_PlantDetailView> {
           _imageHeight = h.toInt();
           VLog.d(
               'image width=${info.image.width} height=${info.image.height} _imageHeight=${_imageHeight}');
+          info.dispose();
         });
       });
       stream.addListener(listener);
@@ -324,7 +330,7 @@ class _PlantDetailViewState extends State<_PlantDetailView> {
   Future<void> _launchInBrowser(String url) async {
     final Uri uri = Uri.parse(url);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      throw Exception('Could not launch $url');
+      VLog.e('Could not launch $url');
     }
   }
 }

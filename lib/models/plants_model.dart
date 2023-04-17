@@ -1,7 +1,6 @@
 import 'dart:collection';
-import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 
 import '../db/db_manager.dart';
 import '../db/garden_planting_dao.dart';
@@ -21,7 +20,6 @@ class PlantModel extends ChangeNotifier {
       await DbManager.check2InsertMockData();
       await _loadPlantingPlants();
       await _loadPlants();
-      _checkUnsplashKey();
     }
 
     setup();
@@ -36,11 +34,7 @@ class PlantModel extends ChangeNotifier {
 
   List<Plant> get plants => UnmodifiableListView(_plants);
 
-  String _unsplashKey = "";
 
-  String get unsplashKey => _unsplashKey;
-
-  bool get hasUnsplashKey => _unsplashKey.length == 43;
 
   _loadPlants() async {
     final dao = PlantsDao();
@@ -95,18 +89,5 @@ class PlantModel extends ChangeNotifier {
       }
     }
     return false;
-  }
-
-  _checkUnsplashKey() async {
-    try {
-      final src = await rootBundle.loadString('assets/data/secret.config');
-      final parsed = jsonDecode(src);
-      _unsplashKey = parsed['unsplash_access_key'] as String;
-      VLog.d('_checkUnsplashKey parsed=$_unsplashKey');
-      if (_unsplashKey.length != 43) _unsplashKey = "";
-    } catch (e) {
-      _unsplashKey = "";
-      VLog.err('no valid UnsplashKey', e);
-    }
   }
 }

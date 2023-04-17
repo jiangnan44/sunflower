@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:sunflower/models/gallery_model.dart';
+import 'package:sunflower/screens/gallery/gallery_screen.dart';
 
 import 'common/theme.dart';
 import 'models/plants_model.dart';
@@ -24,6 +26,11 @@ final _router = GoRouter(
             return PlantDetailScreen(plantId: id);
           },
         ),
+        GoRoute(path: 'gallery/:keyword',
+        builder: (context,state){
+          final key=state.params['keyword']!;
+          return GalleryScreen(keyWord: key);
+        })
       ],
     ),
   ],
