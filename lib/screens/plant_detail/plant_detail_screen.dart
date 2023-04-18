@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:sunflower/models/gallery_model.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../common/theme.dart';
 import '../../db/plants_dao.dart';
@@ -72,9 +73,19 @@ class PlantDetailScreen extends StatelessWidget {
           Navigator.pop(context);
         }),
         _ShareView(onShareClick: () {
-          VLog.d('onShareClick');
+          _doShare(context, plant);
         }),
       ],
+    );
+  }
+
+  _doShare(BuildContext context, Plant plant) {
+    final box = context.findRenderObject() as RenderBox;
+    final msg =
+        'Check out the ${plant.name} plant in the Flutter Sunflower app';
+    Share.share(
+      msg,
+      sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
     );
   }
 }
@@ -158,7 +169,9 @@ class _PlantDetailViewState extends State<_PlantDetailView> {
         _isPlanted
             ? GestureDetector(
                 onTap: () {
-                  context.read<PlantModel>().wateringPlant(widget.plant.plantId);
+                  context
+                      .read<PlantModel>()
+                      .wateringPlant(widget.plant.plantId);
                   GlobalSnackBar.show('watering');
                 },
                 child: const Icon(
@@ -172,7 +185,8 @@ class _PlantDetailViewState extends State<_PlantDetailView> {
             ? GestureDetector(
                 onTap: () {
                   context.go(Uri(
-                    path: '/plant.list/${widget.plant.plantId}/gallery/${widget.plant.name}',
+                    path:
+                        '/plant.list/${widget.plant.plantId}/gallery/${widget.plant.name}',
                   ).toString());
                 },
                 child: const Icon(

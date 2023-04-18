@@ -45,6 +45,7 @@ dependencies:
   flutter_html: ^2.2.1
   transparent_image: ^2.0.1
   http: ^0.13.5
+  share_plus: ^6.3.2
 
 dev_dependencies:
   flutter_test:
