@@ -25,12 +25,16 @@ final _router = GoRouter(
             final id = state.params['id']!;
             return PlantDetailScreen(plantId: id);
           },
+          routes: [
+            GoRoute(
+              path: 'gallery/:keyword',
+              builder: (context, state) {
+                final key = state.params['keyword']!;
+                return GalleryScreen(keyWord: key);
+              },
+            ),
+          ],
         ),
-        GoRoute(path: 'gallery/:keyword',
-        builder: (context,state){
-          final key=state.params['keyword']!;
-          return GalleryScreen(keyWord: key);
-        })
       ],
     ),
   ],

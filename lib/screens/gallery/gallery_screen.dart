@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/gallery.dart';
 import '../../models/gallery_model.dart';
+import '../../views/grid_delegate.dart';
 import '../home/plant_common_views.dart';
 
 class GalleryScreen extends StatefulWidget {
@@ -19,13 +20,12 @@ class GalleryScreen extends StatefulWidget {
 
 class _GalleryScreenState extends State<GalleryScreen> {
   late ScrollController _scrollController;
+  late bool hasSetup;
 
   @override
   void initState() {
     super.initState();
-    context.read<GalleryModel>()
-      ..setup(widget.keyWord)
-      ..refresh();
+    hasSetup = false;
     _scrollController = ScrollController();
     _scrollController.addListener(() {
       final nextPageTrigger = 0.8 * _scrollController.position.maxScrollExtent;
@@ -43,6 +43,12 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (!hasSetup) {
+      hasSetup = true;
+      context.read<GalleryModel>()
+        ..setup(widget.keyWord)
+        ..refresh();
+    }
     final data = context.watch<GalleryModel>().galleryResult;
 
     return Scaffold(
@@ -64,11 +70,13 @@ class _GalleryScreenState extends State<GalleryScreen> {
     }
 
     final length = data.photos!.length;
+    final itemCount = length + (data.hasMore ? 1 : 0);
     return GridView.builder(
       padding: const EdgeInsets.all(12.0),
-      itemCount: length + (data.hasMore ? 1 : 0),
+      itemCount: itemCount,
       controller: _scrollController,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: SliverGridDelegateWithFixedCrossCountAndCenterable(
+          itemCount: itemCount,
           crossAxisCount: 2,
           mainAxisSpacing: 12.0,
           crossAxisSpacing: 10.0,
@@ -88,7 +96,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
     );
   }
 
-  Center _buildLoadingView() =>
+  Widget _buildLoadingView() =>
       const Center(child: CircularProgressIndicator(color: SColors.yellow500));
 
   Widget _buildErrorView(BuildContext context, {final double size = 18.0}) {

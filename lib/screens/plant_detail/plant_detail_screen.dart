@@ -158,6 +158,7 @@ class _PlantDetailViewState extends State<_PlantDetailView> {
         _isPlanted
             ? GestureDetector(
                 onTap: () {
+                  context.read<PlantModel>().wateringPlant(widget.plant.plantId);
                   GlobalSnackBar.show('watering');
                 },
                 child: const Icon(
@@ -171,7 +172,7 @@ class _PlantDetailViewState extends State<_PlantDetailView> {
             ? GestureDetector(
                 onTap: () {
                   context.go(Uri(
-                    path: '/gallery/${widget.plant.name}',
+                    path: '/plant.list/${widget.plant.plantId}/gallery/${widget.plant.name}',
                   ).toString());
                 },
                 child: const Icon(

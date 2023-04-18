@@ -3,7 +3,18 @@ import 'package:http/http.dart' as http;
 import 'package:sunflower/models/gallery.dart';
 import 'package:sunflower/util/logger.dart';
 
-class UnsplashRepository {
+class BaseRepository {
+  newUri(String path, Map<String, String> params) {
+    return Uri(
+      scheme: 'https',
+      host: 'api.unsplash.com',
+      path: path,
+      queryParameters: params,
+    );
+  }
+}
+
+class UnsplashRepository extends BaseRepository {
   static const String _baseUrl = 'https://api.unsplash.com/';
   static const String _searchPhoto = 'search/photos';
 
@@ -13,10 +24,18 @@ class UnsplashRepository {
     final int pageSize,
     final String clientId,
   ) async {
-    final url =
-        '$_baseUrl$_searchPhoto?query=$keyword&page=$page&per_page=$pageSize&client_id=$clientId';
+    // final url = '$_baseUrl$_searchPhoto?query=$keyword&page=$page&per_page=$pageSize&client_id=$clientId';
+    final params = {
+      'query': keyword,
+      'page': page.toString(),
+      'per_page': pageSize.toString(),
+      'client_id': clientId
+    };
+    final uri = newUri(_searchPhoto, params);
+
+
     try {
-      final response = await http.get(Uri.parse(url));
+      final response = await http.get(uri);
       final ret = json.decode(response.body);
       final int totalPages = ret['total_pages'];
       final int totalSize = ret['total'];

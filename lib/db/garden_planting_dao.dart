@@ -1,4 +1,3 @@
-
 import '../models/garden_planting.dart';
 import '../models/planting_plants.dart';
 import 'db_base_dao.dart';
@@ -64,6 +63,20 @@ class GardenPlantingDao extends BaseDbDao {
     );
 
     return maps.isNotEmpty;
+  }
+
+  Future<bool> updateWateringTime(String plantId, int time) async {
+    final db = await DbManager.currentDb();
+    if (null == db) return false;
+
+    final ret = await db.update(
+      tableName,
+      {_cLastWateringTime: time},
+      where: ' $_cPlantId = ? ',
+      whereArgs: [plantId],
+    );
+
+    return ret > 0;
   }
 
   /// this is bad,only for demo

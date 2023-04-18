@@ -34,8 +34,6 @@ class PlantModel extends ChangeNotifier {
 
   List<Plant> get plants => UnmodifiableListView(_plants);
 
-
-
   _loadPlants() async {
     final dao = PlantsDao();
     final list = await dao.queryPlants();
@@ -78,6 +76,18 @@ class PlantModel extends ChangeNotifier {
         notifyListeners();
         GardenPlantingDao().deleteGardenPlanting(plantId);
         return;
+      }
+    }
+  }
+
+  wateringPlant(String plantId) {
+    for (final p in _plantingPlants) {
+      if (p.plant.plantId == plantId) {
+        final time = DateTime.now().millisecondsSinceEpoch;
+        p.gardenPlanting.lastWateringTime = time;
+        notifyListeners();
+        GardenPlantingDao().updateWateringTime(plantId, time);
+        break;
       }
     }
   }
