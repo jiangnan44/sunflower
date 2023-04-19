@@ -80,7 +80,7 @@ class GardenPlantingDao extends BaseDbDao {
   }
 
   /// this is bad,only for demo
-  Future<List<PlantingPlants>?> queryPlantingPlants() async {
+  Future<List<PlantingPlant>?> queryPlantingPlants() async {
     final db = await DbManager.currentDb();
     if (null == db) return null;
 
@@ -90,12 +90,12 @@ class GardenPlantingDao extends BaseDbDao {
     final plantings =
         List.generate(maps.length, (index) => toEntity(maps[index]));
 
-    var ret = List<PlantingPlants>.empty(growable: true);
+    var ret = List<PlantingPlant>.empty(growable: true);
     final plantDao = PlantsDao();
     for (var p in plantings) {
       final e = await plantDao.queryPlantById(p.plantId);
       if (e != null) {
-        ret.add(PlantingPlants(e, p));
+        ret.add(PlantingPlant(e, p));
       }
     }
     return ret;

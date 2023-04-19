@@ -270,8 +270,7 @@ class _PlantDetailViewState extends State<_PlantDetailView> {
           setState(() {
             _isPlanted = false;
           });
-          final model = context.read<PlantModel>();
-          model.removePlantFromGarden(widget.plant.plantId);
+          context.read<PlantModel>().removePlantFromGarden(widget.plant.plantId);
         },
         child: Container(
           decoration: const BoxDecoration(

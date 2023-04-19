@@ -49,18 +49,20 @@ class _GalleryScreenState extends State<GalleryScreen> {
         ..setup(widget.keyWord)
         ..refresh();
     }
-    final data = context.watch<GalleryModel>().galleryResult;
+
 
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
         title: Text(widget.keyWord),
       ),
-      body: _buildGalleryView(context, data),
+      body: _buildGalleryView(context),
     );
   }
 
-  Widget _buildGalleryView(BuildContext context, GalleryData data) {
+  Widget _buildGalleryView(BuildContext context) {
+    final data = context.watch<GalleryModel>().galleryResult;
+
     if (data.photos == null || data.photos!.isEmpty) {
       if (data.loading) {
         return _buildLoadingView();
@@ -84,7 +86,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
       itemBuilder: (context, index) {
         if (index == length) {
           if (data.error) {
-            return Center(child: _buildErrorView(context, size: 12.0));
+            return _buildErrorView(context, size: 12.0);
           } else {
             return _buildLoadingView();
           }

@@ -25,9 +25,9 @@ class PlantModel extends ChangeNotifier {
     setup();
   }
 
-  final List<PlantingPlants> _plantingPlants = [];
+  final List<PlantingPlant> _plantingPlants = [];
 
-  List<PlantingPlants> get plantingPlants =>
+  List<PlantingPlant> get plantingPlants =>
       UnmodifiableListView(_plantingPlants);
 
   final List<Plant> _plants = [];
@@ -63,7 +63,7 @@ class PlantModel extends ChangeNotifier {
     final gp = GardenPlanting(
         plantId: plant.plantId, plantTime: t, lastWateringTime: t);
 
-    _plantingPlants.add(PlantingPlants(plant, gp));
+    _plantingPlants.add(PlantingPlant(plant, gp));
     notifyListeners();
     GardenPlantingDao().insertGardenPlanting(gp);
   }

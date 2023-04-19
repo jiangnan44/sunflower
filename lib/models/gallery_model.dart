@@ -49,10 +49,11 @@ class GalleryModel extends ChangeNotifier {
   }
 
   refresh() async {
+    if (_loading) return;
     _pageIndex = 1;
     _error = false;
     _loading = true;
-    notifyListeners();
+
     final result = await _repository.fetchSearchResultStream(
       _keyword,
       _pageIndex,
@@ -76,8 +77,8 @@ class GalleryModel extends ChangeNotifier {
   }
 
   loadMore() async {
+    if (_loading) return;
     VLog.d('start load more');
-
     _pageIndex++;
     _loading = true;
 
@@ -90,8 +91,8 @@ class GalleryModel extends ChangeNotifier {
 
     _loading = false;
     if (result == null) {
-      _error = true;
       _pageIndex--;
+      _error = true;
       notifyListeners();
       return;
     }

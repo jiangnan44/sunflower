@@ -13,8 +13,8 @@ class PlantsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<PlantModel>(builder: (context, state, child) {
-      final plants = state.plants;
+    return Consumer<PlantModel>(builder: (context, model, child) {
+      final plants = model.plants;
       if (plants.isEmpty) {
         return const Center(
           child: CircularProgressIndicator(),

@@ -23,7 +23,7 @@ class MyGardenListView extends StatelessWidget {
 }
 
 class _GardenPlantingListView extends StatelessWidget {
-  final List<PlantingPlants> _plants;
+  final List<PlantingPlant> _plants;
 
   const _GardenPlantingListView(this._plants);
 
@@ -47,7 +47,7 @@ class _GardenPlantingListView extends StatelessWidget {
 }
 
 class _PlantingItemView extends StatelessWidget {
-  final PlantingPlants _plant;
+  final PlantingPlant _plant;
 
   const _PlantingItemView(this._plant);
 
@@ -64,7 +64,9 @@ class _PlantingItemView extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        context.go(Uri(path: '/plant.list/${_plant.plant.plantId}').toString());
+        context.go(Uri(
+          path: '/plant.list/${_plant.plant.plantId}',
+        ).toString());
       },
       child: Card(
         shape: plantBorder(),

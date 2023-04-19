@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:sunflower/models/gallery_model.dart';
 import 'package:sunflower/screens/gallery/gallery_screen.dart';

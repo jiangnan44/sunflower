@@ -2,9 +2,9 @@
 import 'plant.dart';
 import 'garden_planting.dart';
 
-class PlantingPlants {
+class PlantingPlant {
   Plant plant;
   GardenPlanting gardenPlanting;
 
-  PlantingPlants(this.plant, this.gardenPlanting);
+  PlantingPlant(this.plant, this.gardenPlanting);
 }
